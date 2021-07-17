@@ -1,5 +1,7 @@
 # PrositMaker
 
+A real time prosit maker built with Elixir & Reactjs
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
