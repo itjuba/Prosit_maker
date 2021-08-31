@@ -23,8 +23,14 @@ defmodule PrositMakerWeb.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
-    render(conn, "show.json", user: user)
+    IO.inspect %{"id" =>id}
+    case Accounts.get_user(id) do
+      nil ->      conn
+                  |> json(%{error: %{code: 400, message: "User not found"}})
+                  |> halt
+      user ->  render(conn, "show.json", user: user)
+    end
+
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
@@ -46,7 +52,7 @@ defmodule PrositMakerWeb.UserController do
   def auth(conn,%{"user" => user}) do
     try do
       IO.puts "hhhhhhhhhhhhhhhhhhhhhhhhhh"
-      u = Accounts.get_user_by(user["username"])
+      u = Accounts.get_user_by(user["email"])
 
       cond do
         u && Pbkdf2.verify_pass(user["password"], u.password) ->

@@ -12,7 +12,8 @@ defmodule PrositMakerWeb.UserView do
 
   def render("token.json", %{user: user, token: token}) do
 
-    Jason.encode!(%{token: token})
+    Jason.encode!(%{user: user,
+      token: token})
 
   end
 

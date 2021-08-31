@@ -11,7 +11,7 @@ defmodule PrositMakerWeb.Router do
 
   pipeline :api_protected do
     plug :accepts, ["json"]
-    plug PrositMakerWeb.Auth_plug, otp_app: :SimpleAPI
+    plug PrositMakerWeb.Auth_plug
   end
 
   pipeline :api do
@@ -27,14 +27,17 @@ defmodule PrositMakerWeb.Router do
   scope "/api", PrositMakerWeb do
     pipe_through :api
     post "/auth" , UserController, :auth
-    get "/user_by" , UserController, :get_user_by
-    resources "/users", UserController, only: [:show, :create]
+    resources "/users", UserController, only: [:create]
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", PrositMakerWeb do
-  #   pipe_through :api
-  # end
+   #Other scopes may use custom stacks.
+   scope "/api", PrositMakerWeb do
+     pipe_through :api_protected
+
+     get "/user_by" , UserController, :get_user_by
+     get "/users_list" , UserController, :index
+     resources "/users", UserController, only: [:show]
+   end
 
   # Enables LiveDashboard only for development
   #

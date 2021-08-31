@@ -49,6 +49,8 @@ defmodule PrositMakerWeb.Auth_plug do
 
 
     def fetch_access_token(conn) do
+      tk = Conn.get_req_header(conn, "authorization")
+      IO.puts tk
       case Conn.get_req_header(conn, "authorization") do
         [token | _rest] -> {:ok, token}
         _any            -> :error
@@ -57,13 +59,13 @@ defmodule PrositMakerWeb.Auth_plug do
 
 
     def verify(token) do
-      data = Phoenix.Token.verify(PrositMaker.Endpoint, "user auth", token, max_age: 86400)
-      IO.inspect data
+      IO.inspect token
+      data = Phoenix.Token.verify(PrositMakerWeb.Endpoint, "user auth", token, max_age: 86400)
       case data do
         {:ok,_} -> true
         {:error,:invalid} -> {:invalid}
         {:error, :expired} -> {:expired}
-#
+
       end
     end
   end
